@@ -40,7 +40,6 @@ public class HibernateConfig {
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
 
-        properties.put("hibernate.current_session_context_class", env.getRequiredProperty("hibernate.current_session_context_class"));
         properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
         properties.put("hibernate.format_sql", env.getRequiredProperty("hibernate.format_sql"));
         properties.put("hibernate.highlight_sql", env.getRequiredProperty("hibernate.highlight_sql"));
