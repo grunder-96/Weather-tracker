@@ -23,6 +23,7 @@
     <hibernate.version>6.6.10.Final</hibernate.version>
     <HikariCP.version>6.2.1</HikariCP.version>
     <liquibase.version>4.31.1</liquibase.version>
+    <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
   </properties>
 
   <dependencies>
@@ -93,6 +94,12 @@
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>${HikariCP.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hibernate-validator.version}</version>
     </dependency>
 
     <dependency>
