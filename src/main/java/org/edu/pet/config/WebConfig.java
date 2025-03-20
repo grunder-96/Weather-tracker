@@ -5,7 +5,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
@@ -19,6 +22,24 @@ import org.thymeleaf.templatemode.TemplateMode;
 public class WebConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(applicationContext.getBean("unauthInterceptor", HandlerInterceptor.class))
+                .addPathPatterns("/signup", "/signin");
+
+        registry.addInterceptor(applicationContext.getBean("authInterceptor", HandlerInterceptor.class))
+                .addPathPatterns("/**")
+                .excludePathPatterns("/signup", "/signup", "/static/**");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        WebMvcConfigurer.super.addResourceHandlers(registry);
+        registry.addResourceHandler("/static/css/**").addResourceLocations("/static/css/");
+        registry.addResourceHandler("/static/images/**").addResourceLocations("/static/images/");
+        registry.addResourceHandler("/static/js/**").addResourceLocations("/static/js/");
+    }
 
     /* **************************************************************** */
     /*  THYMELEAF-SPECIFIC ARTIFACTS                                    */
