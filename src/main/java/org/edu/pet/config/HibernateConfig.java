@@ -1,11 +1,13 @@
 package org.edu.pet.config;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -14,6 +16,7 @@ import java.util.Properties;
 @Configuration
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
+@EnableJpaRepositories("org.edu.pet.repository")
 @Import(AppConfig.class)
 @RequiredArgsConstructor
 public class HibernateConfig {
@@ -21,20 +24,25 @@ public class HibernateConfig {
     private final Environment env;
 
     @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory);
+    public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean emfb) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(emfb.getObject());
         return transactionManager;
     }
 
     @Bean
     @DependsOn("liquibase")
-    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setPackagesToScan("org.edu.pet.model");
-        sessionFactory.setHibernateProperties(getHibernateProperties());
-        return sessionFactory;
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+        LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
+        emfb.setDataSource(dataSource);
+        emfb.setPackagesToScan("org.edu.pet.model");
+
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        emfb.setJpaVendorAdapter(vendorAdapter);
+
+        emfb.setJpaProperties(getHibernateProperties());
+
+        return emfb;
     }
 
     private Properties getHibernateProperties() {

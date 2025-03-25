@@ -15,13 +15,22 @@ import java.util.UUID;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+    private final UserRepository userRepository;
+
+    private final SessionMapper sessionMapper;
 
     @Transactional
     public Optional<UserSession> getSession(UUID sessionId) {
         return sessionRepository.getSession(sessionId);
     }
 
-    public boolean isSessionExpired(UserSession session) {
-        return LocalDateTime.now().isAfter(session.getExpiresAt());
+    @Transactional(readOnly = true)
+    public Optional<SessionResponseDto> get(UUID sessionId) {
+        Optional<UserSession> sessionOptional = sessionRepository.findById(sessionId);
+        return sessionOptional.map(sessionMapper::toSessionResponseDto);
+    }
+
+    public boolean isSessionExpired(SessionResponseDto sessionResponseDto) {
+        return LocalDateTime.now().isAfter(sessionResponseDto.expiresAt());
     }
 }

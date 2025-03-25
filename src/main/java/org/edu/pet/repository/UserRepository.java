@@ -1,12 +1,10 @@
 package org.edu.pet.repository;
 
-import org.edu.pet.model.UserSession;
+import org.edu.pet.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface SessionRepository extends CrudRepository<UserSession, UUID> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
 }
