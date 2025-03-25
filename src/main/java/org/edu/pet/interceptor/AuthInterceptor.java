@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.edu.pet.dto.SessionResponseDto;
 import org.edu.pet.exception.InvalidSessionIdException;
-import org.edu.pet.exception.SessionNotFoundException;
+import org.edu.pet.exception.SessionNotFoundOrExpiredException;
 import org.edu.pet.service.SessionService;
 import org.edu.pet.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,15 +43,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         SessionResponseDto sessionResponseDto = sessionService
                 .get(sessionId)
+                .filter(sessionService::isSessionExpired)
                 .orElseThrow(() -> {
                     resp.addCookie(CookieUtil.delete(cookie.getName()));
-                    return new SessionNotFoundException();
+                    return new SessionNotFoundOrExpiredException();
                 });
-
-        if (sessionService.isSessionExpired(sessionResponseDto)) {
-            resp.addCookie(CookieUtil.delete(cookie.getName()));
-            throw new InvalidSessionIdException();
-        }
 
         return true;
     }
