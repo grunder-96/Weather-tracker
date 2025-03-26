@@ -1,7 +1,7 @@
 package org.edu.pet.mapper;
 
-import org.edu.pet.dto.SignUpRequestDto;
-import org.edu.pet.dto.UserResponseDto;
+import org.edu.pet.dto.CreateUserDto;
+import org.edu.pet.dto.ReadUserDto;
 import org.edu.pet.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,11 +13,11 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING)
 public interface UserMapper {
 
-    UserResponseDto toUserResponseDto();
+    ReadUserDto toDto(User user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", source = "pass", qualifiedByName = "hashPass")
-    User fromSignUpRequestDto(SignUpRequestDto signUpRequestDto);
+    @Mapping(target = "password", qualifiedByName = "hashPass")
+    User toEntity(CreateUserDto createUserDto);
 
     @Named("hashPass")
     default String hashPass(String pass) {
