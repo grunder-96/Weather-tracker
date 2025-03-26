@@ -11,5 +11,5 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface SessionMapper {
 
     @Mapping(target = "id", expression = "java(session.getId() != null ? session.getId().toString() : null)")
-    SessionResponseDto toSessionResponseDto(UserSession session);
+    SessionResponseDto toDto(UserSession session);
 }
