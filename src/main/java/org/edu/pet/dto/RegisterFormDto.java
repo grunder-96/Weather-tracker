@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record SignUpRequestDto(
+public record RegisterFormDto(
         @NotBlank(message = "The field cannot be blank")
         @Email(message = "Please enter an email in the correct format")
         @Size(min = 6, message = "Email must be at least {min} characters long")
