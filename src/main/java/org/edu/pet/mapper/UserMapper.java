@@ -8,7 +8,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mindrot.jbcrypt.BCrypt;
 
-@Mapper(componentModel = "spring")
+import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
+
+@Mapper(componentModel = SPRING)
 public interface UserMapper {
 
     UserResponseDto toUserResponseDto();
