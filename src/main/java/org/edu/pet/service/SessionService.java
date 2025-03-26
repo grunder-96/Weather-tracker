@@ -28,7 +28,7 @@ public class SessionService {
     @Transactional
     public SessionResponseDto create(Long userId) {
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow();
 
         UserSession session = UserSession.builder()
                 .user(user)
