@@ -15,6 +15,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.WebUtils;
 
 import java.util.UUID;
+import java.util.function.Predicate;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         SessionResponseDto sessionResponseDto = sessionService
                 .get(sessionId)
-                .filter(sessionService::isSessionExpired)
+                .filter(Predicate.not(sessionService::isSessionExpired))
                 .orElseThrow(() -> {
                     resp.addCookie(CookieUtil.delete(cookie.getName()));
                     return new SessionNotFoundOrExpiredException();
