@@ -1,8 +1,9 @@
 package org.edu.pet.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,20 +18,25 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 @EnableWebMvc
 @Configuration
-@Import(AppConfig.class)
+@Import({HibernateConfig.class})
+@ComponentScan(basePackages = {"org.edu.pet.advice", "org.edu.pet.controller", "org.edu.pet.interceptor"})
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final ApplicationContext applicationContext;
+    @Qualifier("unauthInterceptor")
+    private final HandlerInterceptor unauthInterceptor;
+
+    @Qualifier("authInterceptor")
+    private final HandlerInterceptor authInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(applicationContext.getBean("unauthInterceptor", HandlerInterceptor.class))
+        registry.addInterceptor(unauthInterceptor)
                 .addPathPatterns("/signup", "/signin");
 
-        registry.addInterceptor(applicationContext.getBean("authInterceptor", HandlerInterceptor.class))
+        registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/signup", "/signup", "/static/**");
+                .excludePathPatterns("/signup", "/signin", "/static/**");
     }
 
     @Override
@@ -47,11 +53,10 @@ public class WebConfig implements WebMvcConfigurer {
     /* **************************************************************** */
 
     @Bean
-    public SpringResourceTemplateResolver templateResolver(){
+    public SpringResourceTemplateResolver templateResolver() {
         // SpringResourceTemplateResolver automatically integrates with Spring's own
         // resource resolution infrastructure, which is highly recommended.
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setApplicationContext(this.applicationContext);
         templateResolver.setPrefix("/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         // HTML is the default value, added here for the sake of clarity.

@@ -1,6 +1,8 @@
 package org.edu.pet.config;
 
+import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -41,6 +43,7 @@ public class HibernateConfig {
         emfb.setJpaVendorAdapter(vendorAdapter);
 
         emfb.setJpaProperties(getHibernateProperties());
+        emfb.setEntityManagerFactoryInterface(EntityManagerFactory.class);
 
         return emfb;
     }
