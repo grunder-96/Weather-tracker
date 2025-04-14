@@ -1,13 +1,14 @@
 package org.edu.pet.service;
 
 import lombok.RequiredArgsConstructor;
-import org.edu.pet.dto.SessionResponseDto;
+import org.edu.pet.dto.resp.SessionResponseDto;
 import org.edu.pet.mapper.SessionMapper;
 import org.edu.pet.model.User;
 import org.edu.pet.model.UserSession;
 import org.edu.pet.repository.SessionRepository;
-import org.edu.pet.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -16,35 +17,35 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SessionService {
 
-    public static final int DAYS_UNTIL_EXPIRATION = 30;
+    @Value("${custom.session.expiration.days}")
+    private int daysUntilExpiration;
 
     private final SessionRepository sessionRepository;
-    private final UserRepository userRepository;
-
     private final SessionMapper sessionMapper;
 
-    @Transactional
-    public SessionResponseDto create(Long userId) {
-
-        User user = userRepository.findById(userId).orElseThrow();
+    UserSession create(User user) {
 
         UserSession session = UserSession.builder()
                 .user(user)
-                .expiresAt(LocalDateTime.now().plusDays(DAYS_UNTIL_EXPIRATION))
+                .expiresAt(LocalDateTime.now().plusDays(daysUntilExpiration))
                 .build();
 
-        return sessionMapper.toDto(sessionRepository.save(session));
+        return sessionRepository.save(session);
     }
 
     @Transactional(readOnly = true)
     public Optional<SessionResponseDto> get(UUID sessionId) {
+
         Optional<UserSession> sessionOptional = sessionRepository.findById(sessionId);
         return sessionOptional.map(sessionMapper::toDto);
     }
 
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public boolean isSessionExpired(SessionResponseDto sessionResponseDto) {
+
         return LocalDateTime.now().isAfter(sessionResponseDto.expiresAt());
     }
 }
