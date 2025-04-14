@@ -31,7 +31,7 @@ public class AuthService {
                 .filter(u -> BCrypt.checkpw(authUserDto.pass(), u.getPassword()))
                 .orElseThrow(AuthenticationException::new);
 
-        UserSession session = sessionService.create(user);
+        UserSession session = sessionService.createInternal(user);
 
         return sessionMapper.toAuthDto(session);
     }

@@ -26,7 +26,7 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final SessionMapper sessionMapper;
 
-    UserSession create(User user) {
+    UserSession createInternal(User user) {
 
         UserSession session = UserSession.builder()
                 .user(user)
