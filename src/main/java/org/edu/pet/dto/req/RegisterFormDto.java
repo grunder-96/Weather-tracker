@@ -1,4 +1,4 @@
-package org.edu.pet.dto;
+package org.edu.pet.dto.req;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
