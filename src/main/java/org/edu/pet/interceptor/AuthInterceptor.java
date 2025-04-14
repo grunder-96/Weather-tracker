@@ -4,11 +4,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.edu.pet.dto.SessionResponseDto;
+import org.edu.pet.constant.WebRoutes;
+import org.edu.pet.dto.resp.SessionResponseDto;
 import org.edu.pet.exception.InvalidSessionIdException;
 import org.edu.pet.exception.SessionNotFoundOrExpiredException;
 import org.edu.pet.service.SessionService;
-import org.edu.pet.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,22 +21,18 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
 
-    @Value("${cookie.session_id.name}")
-    private String sessionCookieName;
+    @Value("${custom.session.cookie.name}")
+    private String customSessionCookieName;
 
     private final SessionService sessionService;
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
 
-        if (req.getRequestURI().startsWith("/signin")) {
-            return true;
-        }
-
-        Cookie cookie = WebUtils.getCookie(req, sessionCookieName);
+        Cookie cookie = WebUtils.getCookie(req, customSessionCookieName);
 
         if (cookie == null) {
-            resp.sendRedirect(req.getContextPath() + "/signin");
+            resp.sendRedirect(req.getContextPath() + WebRoutes.SIGN_IN);
             return false;
         }
 
@@ -45,10 +41,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         SessionResponseDto sessionResponseDto = sessionService
                 .get(sessionId)
                 .filter(Predicate.not(sessionService::isSessionExpired))
-                .orElseThrow(() -> {
-                    resp.addCookie(CookieUtil.delete(cookie.getName()));
-                    return new SessionNotFoundOrExpiredException();
-                });
+                .orElseThrow(SessionNotFoundOrExpiredException::new);
 
         return true;
     }
