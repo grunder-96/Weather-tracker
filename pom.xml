@@ -33,7 +33,7 @@
     <jspecify.version>1.0.0</jspecify.version>
     <junit-jupiter.version>5.13.0-M2</junit-jupiter.version>
     <h2.version>2.3.232</h2.version>
-    <hamcrest.version>3.0</hamcrest.version>
+    <assertj.version>4.0.0-M1</assertj.version>
   </properties>
 
   <dependencies>
@@ -170,9 +170,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <version>${hamcrest.version}</version>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>4.0.0-M1</version>
       <scope>test</scope>
     </dependency>
 
