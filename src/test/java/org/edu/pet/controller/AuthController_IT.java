@@ -4,10 +4,9 @@ import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.edu.pet.config.*;
 import org.edu.pet.constant.WebRoutes;
-import org.edu.pet.dto.req.CreateUserDto;
 import org.edu.pet.model.UserSession;
 import org.edu.pet.repository.SessionRepository;
-import org.edu.pet.service.UserService;
+import org.edu.pet.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,19 +40,18 @@ public class AuthController_IT {
     MockMvc mockMvc;
 
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
 
     @Autowired
     SessionRepository sessionRepository;
 
     @BeforeEach
     public void insertDefaultUser() {
-        userService.create(new CreateUserDto(defaultUser().getLogin(),
-                defaultUser().getPassword()));
+        userRepository.save(defaultUser());
     }
 
     @Test
-    public void whenSuccess_thenSessionCreatedAndRedirected() throws Exception {
+    public void whenSuccess_ThenSessionCreatedAndRedirected() throws Exception {
 
         ResultActions result = mockMvc.perform(post(WebRoutes.SIGN_IN)
                 .param("login", defaultUser().getLogin())
