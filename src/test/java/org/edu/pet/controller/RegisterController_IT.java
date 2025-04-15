@@ -33,7 +33,7 @@ public class RegisterController_IT {
     UserRepository userRepository;
 
     @Test
-    public void whenRegisterDataIsValid_thenUserIsSavedInDbAndRedirectedToLoginPage() throws Exception {
+    public void whenRegisterDataIsValid_ThenUserIsSavedInDbAndRedirectedToLoginPage() throws Exception {
 
         ResultActions result = mockMvc.perform(post(WebRoutes.SIGN_UP)
                 .param("login", defaultUser().getLogin())
