@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.edu.pet.constant.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringJUnitConfig(classes = {AppConfig.class, HibernateConfig.class, TestHibernateConfig.class})
@@ -33,13 +34,10 @@ public class UserService_IT {
     @Test
     public void whenUserAlreadyExists_ThenThrowException() {
 
-        String login = "test@gmail.com";
-        String password = "12345678";
-
-        CreateUserDto createUserDto = new CreateUserDto(login, password);
+        CreateUserDto createUserDto = new CreateUserDto(defaultUser().getLogin(), defaultUser().getPassword());
 
         userService.create(createUserDto);
-        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(login);
+        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(defaultUser().getLogin());
 
         assertAll(
             () -> assertThat(userOptional).isPresent(),

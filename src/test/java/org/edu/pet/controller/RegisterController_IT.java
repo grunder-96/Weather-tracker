@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.edu.pet.constant.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -34,20 +35,18 @@ public class RegisterController_IT {
     @Test
     public void whenRegisterDataIsValid_thenUserIsSavedInDbAndRedirectedToLoginPage() throws Exception {
 
-        String login = "test_user";
-
         ResultActions result = mockMvc.perform(post(WebRoutes.SIGN_UP)
-                .param("login", login)
-                .param("pass", "111222333")
-                .param("passConfirm", "111222333"));
+                .param("login", defaultUser().getLogin())
+                .param("pass", defaultUser().getPassword())
+                .param("passConfirm", defaultUser().getPassword()));
 
-        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(login);
+        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(defaultUser().getLogin());
 
         assertAll(
                 () -> result.andExpect(redirectedUrl(WebRoutes.SIGN_IN)),
                 () -> result.andExpect(flash().attributeExists("successNotification")),
                 () -> assertThat(userOptional.isPresent()).isTrue(),
-                () -> assertThat(userOptional.get().getLogin()).isEqualTo(login)
+                () -> assertThat(userOptional.get().getLogin()).isEqualTo(defaultUser().getLogin())
         );
     }
 }
