@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.STRING;
 import static org.edu.pet.constant.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,17 +38,19 @@ public class RegisterController_IT {
     public void whenRegisterDataIsValid_ThenUserIsSavedInDbAndRedirectedToLoginPage() throws Exception {
 
         ResultActions result = mockMvc.perform(post(WebRoutes.SIGN_UP)
-                .param("login", defaultUser().getLogin())
-                .param("pass", defaultUser().getPassword())
-                .param("passConfirm", defaultUser().getPassword()));
+                .param("login", DEFAULT_USER_LOGIN)
+                .param("pass", DEFAULT_USER_PASSWORD)
+                .param("passConfirm", DEFAULT_USER_PASSWORD));
 
-        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(defaultUser().getLogin());
+        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(DEFAULT_USER_LOGIN);
 
         assertAll(
                 () -> result.andExpect(redirectedUrl(WebRoutes.SIGN_IN)),
                 () -> result.andExpect(flash().attributeExists("successNotification")),
-                () -> assertThat(userOptional.isPresent()).isTrue(),
-                () -> assertThat(userOptional.get().getLogin()).isEqualTo(defaultUser().getLogin())
+                () -> assertThat(userOptional)
+                        .map(User::getLogin)
+                        .get(as(STRING))
+                        .isEqualToIgnoringCase(DEFAULT_USER_LOGIN)
         );
     }
 }

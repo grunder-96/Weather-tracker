@@ -34,10 +34,10 @@ public class UserService_IT {
     @Test
     public void whenUserAlreadyExists_ThenThrowException() {
 
-        CreateUserDto createUserDto = new CreateUserDto(defaultUser().getLogin(), defaultUser().getPassword());
+        CreateUserDto createUserDto = new CreateUserDto(DEFAULT_USER_LOGIN, DEFAULT_USER_PASSWORD);
 
         userService.create(createUserDto);
-        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(defaultUser().getLogin());
+        Optional<User> userOptional = userRepository.findByLoginIgnoreCase(DEFAULT_USER_LOGIN);
 
         assertAll(
             () -> assertThat(userOptional).isPresent(),
