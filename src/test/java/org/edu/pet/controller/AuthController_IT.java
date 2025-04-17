@@ -84,4 +84,24 @@ public class AuthController_IT {
             )
         );
     }
+
+    @Test
+    public void whenSessionExpired_ThenRedirectedToSignInPage() throws Exception {
+
+        User user = userRepository.findById(defaultUserId).get();
+
+        UserSession sessionForSave = UserSession.builder()
+                .user(user)
+                .expiresAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        UserSession savedSession = sessionRepository.save(sessionForSave);
+        String sessionIdAsString = savedSession.getId().toString();
+
+        mockMvc.perform(get(WebRoutes.MAIN)
+                .cookie(new Cookie(customSessionCookieName, sessionIdAsString)))
+            .andExpect(cookie().maxAge(customSessionCookieName, 0))
+            .andExpect(redirectedUrl(WebRoutes.SIGN_IN))
+            .andExpect(flash().attribute("errorNotification", "Session not found or expired. Please log in again."));
+    }
 }
