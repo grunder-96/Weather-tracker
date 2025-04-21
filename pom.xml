@@ -35,6 +35,7 @@
     <h2.version>2.3.232</h2.version>
     <assertj.version>4.0.0-M1</assertj.version>
     <hamcrest.version>3.0</hamcrest.version>
+    <jackson.version>2.18.3</jackson.version>
   </properties>
 
   <dependencies>
@@ -182,6 +183,12 @@
       <artifactId>hamcrest</artifactId>
       <version>${hamcrest.version}</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
     </dependency>
 
 
