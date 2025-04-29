@@ -12,14 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/location")
+@RequestMapping(WebRoutes.LOCATION)
 @RequiredArgsConstructor
 public class LocationController {
 
     private final UserDtoMapper userDtoMapper;
     private final UserLocationService userLocationService;
 
-    @PostMapping("/add")
+    @PostMapping(WebRoutes.ADD)
     public String addLocationToUser(@ModelAttribute AddLocationDto addLocationDto,
                                     @RequestAttribute("user") ReadUserDto readUserDto) {
 
@@ -29,7 +29,7 @@ public class LocationController {
         return WebRoutes.redirectTo(WebRoutes.MAIN);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping(WebRoutes.DELETE)
     public String deleteUserLocation(@ModelAttribute DeleteLocationDto deleteLocationDto,
                                      @RequestAttribute("user") ReadUserDto readUserDto) {
 

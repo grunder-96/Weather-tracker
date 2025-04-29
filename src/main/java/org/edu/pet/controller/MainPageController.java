@@ -2,6 +2,7 @@ package org.edu.pet.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.edu.pet.constant.TemplateNames;
+import org.edu.pet.constant.WebRoutes;
 import org.edu.pet.dto.resp.ReadUserDto;
 import org.edu.pet.dto.resp.WeatherCardDto;
 import org.edu.pet.mapper.UserDtoMapper;
@@ -21,7 +22,7 @@ public class MainPageController {
     private final WeatherCardService weatherCardService;
     private final UserDtoMapper userDtoMapper;
 
-    @GetMapping("/")
+    @GetMapping(WebRoutes.MAIN)
     public String getMainPage(@RequestAttribute("user") ReadUserDto readUserDto, Model model) {
 
         User user = userDtoMapper.toEntity(readUserDto);

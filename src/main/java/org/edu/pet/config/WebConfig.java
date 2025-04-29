@@ -18,6 +18,8 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.edu.pet.constant.WebRoutes.*;
+
 @EnableWebMvc
 @Configuration
 @Import({HibernateConfig.class})
@@ -34,11 +36,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(unauthInterceptor)
-                .addPathPatterns("/signup", "/signin");
+                .addPathPatterns(SIGN_UP, SIGN_IN);
 
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/signup", "/signin", "/static/**");
+                .addPathPatterns(SIGN_OUT, LOCATION_ALL, MAIN, SEARCH)
+                .excludePathPatterns(SIGN_UP, SIGN_IN, STATIC_ALL);
     }
 
     @Override

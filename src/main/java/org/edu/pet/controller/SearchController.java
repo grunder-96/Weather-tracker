@@ -2,6 +2,7 @@ package org.edu.pet.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.edu.pet.constant.TemplateNames;
+import org.edu.pet.constant.WebRoutes;
 import org.edu.pet.dto.resp.LocationCardDto;
 import org.edu.pet.dto.resp.ReadUserDto;
 import org.edu.pet.mapper.UserDtoMapper;
@@ -22,7 +23,7 @@ public class SearchController {
     private final LocationCardService locationCardService;
     private final UserDtoMapper userDtoMapper;
 
-    @GetMapping("/search")
+    @GetMapping(WebRoutes.SEARCH)
     public String getSearchPage(@RequestParam(value = "keyword") String keyword,
                                 @RequestAttribute("user") ReadUserDto readUserDto,
                                 Model model) {
