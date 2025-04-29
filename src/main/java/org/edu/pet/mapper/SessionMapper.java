@@ -11,9 +11,9 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING)
 public interface SessionMapper {
 
-    SessionResponseDto toDto(UserSession session);
+    SessionResponseDto toSessionResponseDto(UserSession session);
 
     @Mapping(target = "sessionId", expression = "java(session.getId() != null ? session.getId().toString() : null)")
     @Mapping(target = "sessionExpirationTime", source = "expiresAt")
-    AuthResponseDto toAuthDto(UserSession session);
+    AuthResponseDto toAuthResponseDto(UserSession session);
 }
