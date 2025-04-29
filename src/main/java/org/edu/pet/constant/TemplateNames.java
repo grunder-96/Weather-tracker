@@ -9,4 +9,5 @@ public class TemplateNames {
     public final String SIGN_UP = "sign-up";
     public final String MAIN = "main";
     public final String SEARCH = "search";
+    public final String ERROR = "error";
 }
