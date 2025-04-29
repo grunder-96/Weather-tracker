@@ -10,11 +10,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
 import java.net.http.HttpClient;
 
 @Configuration
+@EnableScheduling
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = {"org.edu.pet.service", "org.edu.pet.mapper"})
 @RequiredArgsConstructor
