@@ -33,6 +33,6 @@ public class AuthService {
 
         UserSession session = sessionService.createInternal(user);
 
-        return sessionMapper.toAuthDto(session);
+        return sessionMapper.toAuthResponseDto(session);
     }
 }
