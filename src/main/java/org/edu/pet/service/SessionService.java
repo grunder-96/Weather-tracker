@@ -8,6 +8,7 @@ import org.edu.pet.mapper.SessionMapper;
 import org.edu.pet.model.User;
 import org.edu.pet.model.UserSession;
 import org.edu.pet.repository.SessionRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +48,15 @@ public class SessionService {
 
         UUID sessionId = convertToUuid(uuidAsString);
         sessionRepository.deleteById(sessionId);
+    }
+
+    @Scheduled(fixedDelayString = "${fixedDelay.milliseconds}",
+            initialDelayString = "${initialDelay.milliseconds}")
+    @Transactional
+    public void removeExpiredSessions() {
+
+        LocalDateTime now = LocalDateTime.now();
+        sessionRepository.deleteExpiredSessions(now);
     }
 
     public boolean isSessionExpired(SessionResponseDto sessionResponseDto) {
