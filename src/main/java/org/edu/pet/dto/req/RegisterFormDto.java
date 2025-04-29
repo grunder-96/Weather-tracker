@@ -16,6 +16,8 @@ public record RegisterFormDto(
         @Size(min = 8, message = "Password must be at least {min} characters long")
         @Size(max = 20, message = "Password must be no more than {max} characters long")
         @Pattern(regexp = "\\S+", message = "Password must not contain spaces")
+        @Pattern(regexp = "[a-zA-Z0-9\\p{Punct}]+",
+                message = "Password must contain only english letters, numbers and special characters")
         String pass,
 
         String passConfirm
