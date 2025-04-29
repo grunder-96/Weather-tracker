@@ -10,6 +10,7 @@ public class WebRoutes {
 
     public final String SIGN_UP = "/signup";
     public final String SIGN_IN = "/signin";
+    public final String SIGN_OUT = "/signout";
     public final String MAIN = "/";
 
     public String redirectTo(@NonNull String route) {
