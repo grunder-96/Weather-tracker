@@ -2,6 +2,7 @@ package org.edu.pet.controller;
 
 import jakarta.servlet.http.Cookie;
 import org.edu.pet.config.*;
+import org.edu.pet.constant.SessionCookieSettings;
 import org.edu.pet.constant.WebRoutes;
 import org.edu.pet.model.User;
 import org.edu.pet.model.UserSession;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,9 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("classpath:application-test.properties")
 @Transactional
 public class AuthController_IT {
-
-    @Value("${custom.session.cookie.name}")
-    String customSessionCookieName;
 
     @Autowired
     MockMvc mockMvc;
@@ -67,10 +64,10 @@ public class AuthController_IT {
                 .param("pass", DEFAULT_USER_PASSWORD));
 
         assertAll(
-            () -> result.andExpect(cookie().exists(customSessionCookieName)),
+            () -> result.andExpect(cookie().exists(SessionCookieSettings.COOKIE_NAME)),
             () -> result.andExpect(redirectedUrl(WebRoutes.MAIN)),
             () -> result.andDo(res -> {
-                Cookie cookie = res.getResponse().getCookie(customSessionCookieName);
+                Cookie cookie = res.getResponse().getCookie(SessionCookieSettings.COOKIE_NAME);
                 assertThat(cookie).isNotNull();
 
                 UUID sessionId = UUID.fromString(cookie.getValue());
@@ -99,8 +96,8 @@ public class AuthController_IT {
         String sessionIdAsString = savedSession.getId().toString();
 
         mockMvc.perform(get(WebRoutes.MAIN)
-                .cookie(new Cookie(customSessionCookieName, sessionIdAsString)))
-            .andExpect(cookie().maxAge(customSessionCookieName, 0))
+                .cookie(new Cookie(SessionCookieSettings.COOKIE_NAME, sessionIdAsString)))
+            .andExpect(cookie().maxAge(SessionCookieSettings.COOKIE_NAME, 0))
             .andExpect(redirectedUrl(WebRoutes.SIGN_IN))
             .andExpect(flash().attribute("errorNotification", "Session not found or expired. Please log in again."));
     }
