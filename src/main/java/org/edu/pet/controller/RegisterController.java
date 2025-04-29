@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.edu.pet.constant.TemplateNames;
 import org.edu.pet.constant.WebRoutes;
 import org.edu.pet.dto.req.RegisterFormDto;
-import org.edu.pet.mapper.RegisterFormDtoMapper;
+import org.edu.pet.mapper.UserDtoMapper;
 import org.edu.pet.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class RegisterController {
 
-    private final RegisterFormDtoMapper registerFormDtoMapper;
+    private final UserDtoMapper userDtoMapper;
     private final UserService userService;
 
     @GetMapping(WebRoutes.SIGN_UP)
@@ -42,7 +42,7 @@ public class RegisterController {
             return TemplateNames.SIGN_UP;
         }
 
-        userService.create(registerFormDtoMapper.toDto(registerFormDto));
+        userService.create(userDtoMapper.toCreateUserDto(registerFormDto));
 
         redirectAttributes.addFlashAttribute("successNotification", "Registration complete. Time to log in!");
         return WebRoutes.redirectTo(WebRoutes.SIGN_IN);
