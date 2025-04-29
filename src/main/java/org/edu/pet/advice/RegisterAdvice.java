@@ -14,11 +14,24 @@ public class RegisterAdvice {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public String handleUsernameAlreadyExistsSituation(DataIntegrityViolationException e, RedirectAttributes redirectAttributes) {
 
-        if (e.getMessage().toLowerCase().contains(USERNAME_ALREADY_EXISTS_CONSTRAINT.toLowerCase())) {
-            redirectAttributes.addFlashAttribute("errorNotification", "User with this email already exists");
-            return WebRoutes.redirectTo(WebRoutes.SIGN_UP);
+        Throwable current = (Throwable) e;
+
+        while (current != null) {
+
+            if (isUsernameAlreadyExistsSituation(e)) {
+                redirectAttributes.addFlashAttribute("errorNotification", "User with this email already exists");
+                return WebRoutes.redirectTo(WebRoutes.SIGN_UP);
+            }
+
+            current = current.getCause();
         }
 
         throw e;
+    }
+
+    private boolean isUsernameAlreadyExistsSituation(Throwable e) {
+
+        return e.getMessage().toLowerCase()
+                .contains(USERNAME_ALREADY_EXISTS_CONSTRAINT.toLowerCase());
     }
 }
