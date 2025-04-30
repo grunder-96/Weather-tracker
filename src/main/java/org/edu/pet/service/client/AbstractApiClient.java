@@ -1,7 +1,7 @@
 package org.edu.pet.service.client;
 
 import lombok.RequiredArgsConstructor;
-import org.edu.pet.exception.ApiClientException;
+import org.edu.pet.exception.ApiServerException;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public abstract class AbstractApiClient {
         try {
             return httpClient.send(req, responseBodyHandler);
         } catch (IOException | InterruptedException e) {
-            throw new ApiClientException();
+            throw new ApiServerException();
         }
     }
 }
