@@ -13,6 +13,7 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 @Mapper(componentModel = SPRING)
 public interface LocationDtoMapper {
 
+    @Mapping(target = "state", defaultValue = "")
     LocationCardDto toDto(GeocodingApiResponseDto geocodingApiResponseDto, boolean isAdded);
 
     @Mapping(target = "id", ignore = true)
