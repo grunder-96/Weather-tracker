@@ -35,6 +35,7 @@
     <assertj.version>4.0.0-M1</assertj.version>
     <hamcrest.version>3.0</hamcrest.version>
     <jackson.version>2.18.3</jackson.version>
+    <mockito.version>5.17.0</mockito.version>
   </properties>
 
   <dependencies>
@@ -188,6 +189,13 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
     </dependency>
 
 
