@@ -9,7 +9,7 @@ import org.edu.pet.dto.resp.GeocodingApiResponseDto;
 import org.edu.pet.dto.resp.CurrentWeatherApiResponseDto;
 import org.edu.pet.exception.ApiClientException;
 import org.edu.pet.exception.ApiServerException;
-import org.edu.pet.service.client.CurrentWeatherApiCilent;
+import org.edu.pet.service.client.CurrentWeatherApiClient;
 import org.edu.pet.service.client.GeocodingApiClient;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class OpenWeatherApiService {
 
     private final GeocodingApiClient geocodingApiClient;
-    private final CurrentWeatherApiCilent currentWeatherApiCilent;
+    private final CurrentWeatherApiClient currentWeatherApiClient;
     private final ObjectMapper objectMapper;
 
     @SneakyThrows(JsonProcessingException.class)
@@ -37,7 +37,7 @@ public class OpenWeatherApiService {
     @SneakyThrows(JsonProcessingException.class)
     public CurrentWeatherApiResponseDto getWeatherByCoordinates(BigDecimal latitude, BigDecimal longitude) {
 
-        HttpResponse<String> response = currentWeatherApiCilent.getWeatherByCoordinates(latitude, longitude);
+        HttpResponse<String> response = currentWeatherApiClient.getWeatherByCoordinates(latitude, longitude);
         validateResponse(response);
 
         return objectMapper.readValue(response.body(), CurrentWeatherApiResponseDto.class);

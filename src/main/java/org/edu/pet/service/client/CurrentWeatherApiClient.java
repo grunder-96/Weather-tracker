@@ -11,9 +11,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @Component
-public class CurrentWeatherApiCilent extends AbstractApiClient {
+public class CurrentWeatherApiClient extends AbstractApiClient {
 
-    public CurrentWeatherApiCilent(HttpClient httpClient, @Value("${api.current_weather.url}") String baseUrl) {
+    public CurrentWeatherApiClient(HttpClient httpClient, @Value("${api.current_weather.url}") String baseUrl) {
         super(httpClient, baseUrl);
     }
 
