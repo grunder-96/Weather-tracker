@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SpringJUnitConfig(classes = {AppConfig.class, HibernateConfig.class, TestHibernateConfig.class})
 @TestPropertySource("classpath:application-test.properties")
 @Transactional
-public class UserService_IT {
+public class UserServiceIT {
 
     @Autowired
     private UserService userService;
@@ -32,10 +32,8 @@ public class UserService_IT {
     private UserRepository userRepository;
 
     @Test
-    public void whenUserAlreadyExists_ThenThrowException() {
-
+    void shouldThrowExceptionIfUserAlreadyExists() {
         CreateUserDto createUserDto = new CreateUserDto(DEFAULT_USER_LOGIN, DEFAULT_USER_PASSWORD);
-
         userService.create(createUserDto);
         Optional<User> userOptional = userRepository.findByLoginIgnoreCase(DEFAULT_USER_LOGIN);
 
